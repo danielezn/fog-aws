@@ -440,7 +440,7 @@ module Fog
             @scheme     = options[:scheme]      || DEFAULT_SCHEME
             @port       = options[:port]        || DEFAULT_SCHEME_PORT[@scheme]
           end
-
+          binding.pry
 
           @path_style = options[:path_style] || false
           @signature_version = options.fetch(:aws_signature_version, 4)
