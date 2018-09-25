@@ -218,6 +218,7 @@ module Fog
         end
 
         def region_to_host(region=nil)
+          binding.pry
           "sa-chile-1.telefonicaopencloud.com"
           # case region.to_s
           # when DEFAULT_REGION, ''
