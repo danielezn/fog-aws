@@ -126,6 +126,7 @@ module Fog
         end
 
         def https_url(params, expires)
+          binding.pry
           signed_url(params.merge(:scheme => 'https'), expires)
         end
 
@@ -272,7 +273,7 @@ module Fog
 
           path     = params[:path] || object_to_path(params[:object_name])
           path     = '/' + path if path[0..0] != '/'
-
+          binding.pry
           if params[:bucket_name]
             bucket_name = params[:bucket_name]
 
@@ -289,7 +290,7 @@ module Fog
                   path_style = true
                 end
               end
-
+              binding.pry
               if path_style
                 path = bucket_to_path bucket_name, path
               else
@@ -297,7 +298,6 @@ module Fog
               end
             end
           end
-
           ret = params.merge({
             :scheme       => scheme,
             :host         => host,
@@ -323,7 +323,7 @@ module Fog
               key
             end
           end.join('&')
-
+          binding.pry
           URI::Generic.build({
             :scheme => params[:scheme],
             :host   => params[:host],
