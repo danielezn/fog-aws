@@ -262,7 +262,7 @@ module Fog
           if DEFAULT_SCHEME_PORT[scheme] == port
             port = nil
           end
-
+          binding.pry
           if params[:region]
             region = params[:region]
             host   = params[:host] || region_to_host(region)
