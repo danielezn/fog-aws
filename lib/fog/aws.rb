@@ -229,12 +229,10 @@ module Fog
     end
 
     def self.regions
-      binding.pry
       @regions ||= ['sa-chile-1']
     end
 
     def self.validate_region!(region, host=nil)
-      binding.pry
       if (!host || host.end_with?('.amazonaws.com')) && !regions.include?(region)
         raise ArgumentError, "Unknown region: #{region.inspect}"
       end
