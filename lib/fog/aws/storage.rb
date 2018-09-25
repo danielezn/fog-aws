@@ -516,7 +516,7 @@ module Fog
             @scheme     = options[:scheme]      || DEFAULT_SCHEME
             @port       = options[:port]        || DEFAULT_SCHEME_PORT[@scheme]
           end
-
+          binding.pry
           setup_credentials(options)
         end
 
