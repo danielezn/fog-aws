@@ -126,7 +126,6 @@ module Fog
         end
 
         def https_url(params, expires)
-          binding.pry
           signed_url(params.merge(:scheme => 'https'), expires)
         end
 
@@ -219,7 +218,6 @@ module Fog
         end
 
         def region_to_host(region=nil)
-          binding.pry
           "sa-chile-1.telefonicaopencloud.com"
           # case region.to_s
           # when DEFAULT_REGION, ''
@@ -262,7 +260,6 @@ module Fog
           if DEFAULT_SCHEME_PORT[scheme] == port
             port = nil
           end
-          binding.pry
           if params[:region]
             region = params[:region]
             host   = params[:host] || region_to_host(region)
@@ -273,7 +270,6 @@ module Fog
 
           path     = params[:path] || object_to_path(params[:object_name])
           path     = '/' + path if path[0..0] != '/'
-          binding.pry
           if params[:bucket_name]
             bucket_name = params[:bucket_name]
 
@@ -290,7 +286,6 @@ module Fog
                   path_style = true
                 end
               end
-              binding.pry
               if path_style
                 path = bucket_to_path bucket_name, path
               else
@@ -311,7 +306,7 @@ module Fog
           ret.delete(:bucket_name)
           ret.delete(:object_name)
           ret.delete(:region)
-
+          binding.pry
           ret
         end
 
@@ -323,7 +318,6 @@ module Fog
               key
             end
           end.join('&')
-          binding.pry
           URI::Generic.build({
             :scheme => params[:scheme],
             :host   => params[:host],
@@ -440,7 +434,6 @@ module Fog
             @scheme     = options[:scheme]      || DEFAULT_SCHEME
             @port       = options[:port]        || DEFAULT_SCHEME_PORT[@scheme]
           end
-          binding.pry
 
           @path_style = options[:path_style] || false
           @signature_version = options.fetch(:aws_signature_version, 4)
@@ -516,7 +509,6 @@ module Fog
             @scheme     = options[:scheme]      || DEFAULT_SCHEME
             @port       = options[:port]        || DEFAULT_SCHEME_PORT[@scheme]
           end
-          binding.pry
           setup_credentials(options)
         end
 
@@ -612,9 +604,9 @@ module Fog
         end
 
         def _request(scheme, host, port, params, original_params, &block)
-          binding.pry
           connection(scheme, host, port).request(params, &block)
         rescue Excon::Errors::MovedPermanently, Excon::Errors::TemporaryRedirect => error
+          binding.pry
           headers = (error.response.is_a?(Hash) ? error.response[:headers] : error.response.headers)
           new_params = {}
           if headers.has_key?('Location')
