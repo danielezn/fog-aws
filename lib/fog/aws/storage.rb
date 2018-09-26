@@ -5,7 +5,7 @@ module Fog
 
       COMPLIANT_BUCKET_NAMES = /^(?:[a-z]|\d(?!\d{0,2}(?:\.\d{1,3}){3}$))(?:[a-z0-9]|\.(?![\.\-])|\-(?![\.])){1,61}[a-z0-9]$/
 
-      DEFAULT_REGION = 'sa-chile-1'
+      DEFAULT_REGION = 'obs.sa-chile-1'
 
       DEFAULT_SCHEME = 'https'
       DEFAULT_SCHEME_PORT = {
@@ -604,6 +604,7 @@ module Fog
         end
 
         def _request(scheme, host, port, params, original_params, &block)
+          binding.pry
           connection(scheme, host, port).request(params, &block)
         rescue Excon::Errors::MovedPermanently, Excon::Errors::TemporaryRedirect => error
           binding.pry
