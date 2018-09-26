@@ -5,7 +5,7 @@ module Fog
 
       COMPLIANT_BUCKET_NAMES = /^(?:[a-z]|\d(?!\d{0,2}(?:\.\d{1,3}){3}$))(?:[a-z0-9]|\.(?![\.\-])|\-(?![\.])){1,61}[a-z0-9]$/
 
-      DEFAULT_REGION = 'obs.sa-chile-1'
+      DEFAULT_REGION = 'us-east-1'
 
       DEFAULT_SCHEME = 'https'
       DEFAULT_SCHEME_PORT = {
@@ -217,16 +217,16 @@ module Fog
           params
         end
 
-        def region_to_host(region=nil)
-          "obs.sa-chile-1.telefonicaopencloud.com"
-          # case region.to_s
-          # when DEFAULT_REGION, ''
-          #   's3.amazonaws.com'
-          # when 'cn-north-1'
-          #   's3.cn-north-1.amazonaws.com.cn'
-          # else
-          #   "s3-#{region}.amazonaws.com"
-          # end
+        def region_to_host(region = nil)
+          return "#{region}.#{@aws_url_endpoint}" if @aws_url_endpoint
+          case region.to_s
+          when DEFAULT_REGION, ''
+            's3.amazonaws.com'
+          when 'cn-north-1'
+            's3.cn-north-1.amazonaws.com.cn'
+          else
+            "s3-#{region}.amazonaws.com"
+          end
         end
 
         def object_to_path(object_name=nil)
@@ -453,7 +453,7 @@ module Fog
           @aws_secret_access_key = options[:aws_secret_access_key]
           @aws_session_token     = options[:aws_session_token]
           @aws_credentials_expire_at = options[:aws_credentials_expire_at]
-
+          @aws_url_endpoint = options[:aws_url_endpoint] if options[:aws_url_endpoint]
           @signer = Fog::AWS::SignatureV4.new( @aws_access_key_id, @aws_secret_access_key, @region, 's3')
         end
 
@@ -523,6 +523,7 @@ module Fog
           @aws_secret_access_key = options[:aws_secret_access_key]
           @aws_session_token     = options[:aws_session_token]
           @aws_credentials_expire_at = options[:aws_credentials_expire_at]
+          @aws_url_endpoint = options[:aws_url_endpoint] if options[:aws_url_endpoint]
 
           if @signature_version == 4
             @signer = Fog::AWS::SignatureV4.new( @aws_access_key_id, @aws_secret_access_key, @region, 's3')
@@ -619,7 +620,12 @@ module Fog
           end
           Fog::Logger.warning("fog: followed redirect to #{host}, connecting to the matching region will be more performant")
           original_region, original_signer = @region, @signer
-          @region = @new_region || DEFAULT_REGION
+          @region = @new_region || case new_params[:host]
+          when /s3.amazonaws.com/, /s3-external-1.amazonaws.com/
+            DEFAULT_REGION
+          else
+            %r{s3[\.\-]([^\.]*).amazonaws.com}.match(new_params[:host]).captures.first
+          end
           if @signature_version == 4
             @signer = Fog::AWS::SignatureV4.new(@aws_access_key_id, @aws_secret_access_key, @region, 's3')
             original_params[:headers].delete('Authorization')
