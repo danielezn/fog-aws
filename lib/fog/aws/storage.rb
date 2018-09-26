@@ -218,7 +218,7 @@ module Fog
         end
 
         def region_to_host(region=nil)
-          "sa-chile-1.telefonicaopencloud.com"
+          "obs.sa-chile-1.telefonicaopencloud.com"
           # case region.to_s
           # when DEFAULT_REGION, ''
           #   's3.amazonaws.com'
@@ -306,7 +306,6 @@ module Fog
           ret.delete(:bucket_name)
           ret.delete(:object_name)
           ret.delete(:region)
-          binding.pry
           ret
         end
 
@@ -604,10 +603,8 @@ module Fog
         end
 
         def _request(scheme, host, port, params, original_params, &block)
-          binding.pry
           connection(scheme, host, port).request(params, &block)
         rescue Excon::Errors::MovedPermanently, Excon::Errors::TemporaryRedirect => error
-          binding.pry
           headers = (error.response.is_a?(Hash) ? error.response[:headers] : error.response.headers)
           new_params = {}
           if headers.has_key?('Location')
