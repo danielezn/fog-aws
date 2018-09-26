@@ -261,9 +261,11 @@ module Fog
             port = nil
           end
           if params[:region]
+            binding.pry
             region = params[:region]
             host   = params[:host] || region_to_host(region)
           else
+            binding.pry
             region = @region       || DEFAULT_REGION
             host   = params[:host] || @host || region_to_host(region)
           end
@@ -429,6 +431,7 @@ module Fog
             @scheme = endpoint.scheme
             @port = endpoint.port
           else
+            binding.pry
             @host       = options[:host]        || region_to_host(@region)
             @scheme     = options[:scheme]      || DEFAULT_SCHEME
             @port       = options[:port]        || DEFAULT_SCHEME_PORT[@scheme]
@@ -449,6 +452,7 @@ module Fog
         end
 
         def setup_credentials(options)
+          binding.pry
           @aws_access_key_id = options[:aws_access_key_id]
           @aws_secret_access_key = options[:aws_secret_access_key]
           @aws_session_token     = options[:aws_session_token]
@@ -504,6 +508,7 @@ module Fog
             @scheme = endpoint.scheme
             @port = endpoint.port
           else
+            binding.pry
             @host       = options[:host]        || region_to_host(@region)
             @scheme     = options[:scheme]      || DEFAULT_SCHEME
             @port       = options[:port]        || DEFAULT_SCHEME_PORT[@scheme]
@@ -519,6 +524,7 @@ module Fog
 
 
         def setup_credentials(options)
+          binding.pry
           @aws_access_key_id     = options[:aws_access_key_id]
           @aws_secret_access_key = options[:aws_secret_access_key]
           @aws_session_token     = options[:aws_session_token]
