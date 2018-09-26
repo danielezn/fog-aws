@@ -218,6 +218,7 @@ module Fog
         end
 
         def region_to_host(region = nil)
+          binding.pry
           return "#{region}.#{@aws_url_endpoint}" if @aws_url_endpoint
           case region.to_s
           when DEFAULT_REGION, ''
